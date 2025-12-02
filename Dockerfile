@@ -13,6 +13,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     nginx \
     supervisor \
+    autoconf \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
@@ -22,7 +24,11 @@ RUN docker-php-ext-configure intl \
     intl \
     zip \
     opcache \
-    gd
+    gd \
+    sockets
+
+# Install Redis extension via PECL
+RUN pecl install redis && docker-php-ext-enable redis
 
 # Copy Composer from official image
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
